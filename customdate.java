@@ -7,10 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 public class CustomDailyFolderAppender extends DailyRollingFileAppender {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    
     // Remove @Override since setFile is protected in parent class
     public synchronized void setFile(String fileName, boolean append, boolean bufferedIO, int bufferSize) {
         String date = dateFormat.format(new Date());

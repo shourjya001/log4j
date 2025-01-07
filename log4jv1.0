@@ -1,0 +1,14 @@
+# Root Logger
+log4j.rootLogger=INFO, FILE, CONSOLE
+
+# File Appender
+log4j.appender.FILE=com.socgen.dbe.CustomDateFileAppender
+log4j.appender.FILE.File=maestroLogs.log
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %m%n
+
+# Console Appender
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.Target=System.out
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %m%n

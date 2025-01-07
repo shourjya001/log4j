@@ -2,8 +2,8 @@
 log4j.rootLogger=INFO, FILE, CONSOLE
 
 # File Appender
-log4j.appender.FILE=your.package.CustomDailyRollingFileAppender
-log4j.appender.FILE.File=logs/${date}/maestroLogs.log
+log4j.appender.FILE=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.FILE.File=logs/${date:yyyy-MM-dd}/maestroLogs.log
 log4j.appender.FILE.DatePattern='.'yyyy-MM-dd
 log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
 log4j.appender.FILE.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %m%n

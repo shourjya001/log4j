@@ -1,14 +1,18 @@
 // CustomDailyFolderAppender.java
+package com.socgen.dbe;
+
 import org.apache.log4j.DailyRollingFileAppender;
+import org.apache.log4j.helpers.LogLog;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CustomDailyFolderAppender extends DailyRollingFileAppender {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
-    @Override
-    public void setFile(String fileName) {
+    // Remove @Override since setFile is protected in parent class
+    public synchronized void setFile(String fileName, boolean append, boolean bufferedIO, int bufferSize) {
         String date = dateFormat.format(new Date());
         // Create date-specific folder path
         String folderPath = "logs/" + date;
@@ -21,26 +25,34 @@ public class CustomDailyFolderAppender extends DailyRollingFileAppender {
             directory.mkdirs();
         }
         
-        super.setFile(newFileName);
+        try {
+            super.setFile(newFileName, append, bufferedIO, bufferSize);
+        } catch (IOException e) {
+            LogLog.error("Error setting file name", e);
+        }
     }
     
-    @Override
-    public void rollOver() {
-        // Get tomorrow's date for the new file
-        String newDate = dateFormat.format(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
-        String newFolderPath = "logs/" + newDate;
+    // Instead of overriding rollOver, we'll implement our own date change handling
+    public void subAppend(org.apache.log4j.spi.LoggingEvent event) {
+        String currentDate = dateFormat.format(new Date());
+        String currentFilePath = getFile();
         
-        // Create tomorrow's directory
-        File directory = new File(newFolderPath);
-        if (!directory.exists()) {
-            directory.mkdirs();
+        if (currentFilePath != null && !currentFilePath.contains(currentDate)) {
+            // Date has changed, need to update file location
+            String newFolderPath = "logs/" + currentDate;
+            String newFileName = newFolderPath + "/maestroLogs.log";
+            
+            // Create new directory
+            File directory = new File(newFolderPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            
+            // Close current file and open new one
+            this.closeFile();
+            setFile(newFileName, true, bufferedIO, bufferSize);
         }
         
-        // Set the new file path
-        String newFileName = newFolderPath + "/maestroLogs.log";
-        super.setFile(newFileName);
-        
-        // Call parent rollOver to handle file creation
-        super.rollOver();
+        super.subAppend(event);
     }
 }

@@ -10,11 +10,11 @@ public class CustomRealTimeAppender extends FileAppender {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private String lastFileName;
 
-  private boolean appendToFile = false; // Add this field to control append behavior
+  // private boolean appendToFile = false; // Add this field to control append behavior
     
-    public void setAppendToFile(boolean append) {
-        this.appendToFile = append;
-    }
+  //   public void setAppendToFile(boolean append) {
+  //       this.appendToFile = append;
+  //   }
     
     @Override
     public void activateOptions() {
@@ -34,7 +34,7 @@ public class CustomRealTimeAppender extends FileAppender {
             
             if (!newFileName.equals(lastFileName)) {
                 lastFileName = newFileName;
-                setFile(newFileName, appendToFile, bufferedIO, bufferSize);
+                setFile(newFileName, true, bufferedIO, bufferSize);
             }
         } catch (IOException e) {
             LogLog.error("Error updating log file", e);

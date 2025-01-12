@@ -30,7 +30,7 @@ public class CustomRealTimeAppender extends FileAppender {
                 logsDir.mkdirs();
             }
             
-            String newFileName = "logs/" + date + "maestroLogs.log";
+              String newFileName = "logs/maestrologs_" + date + ".log";
             
             if (!newFileName.equals(lastFileName)) {
                 lastFileName = newFileName;
@@ -44,7 +44,7 @@ public class CustomRealTimeAppender extends FileAppender {
     @Override
     protected void subAppend(org.apache.log4j.spi.LoggingEvent event) {
         String currentDate = dateFormat.format(new Date());
-        String expectedFileName = "logs/" + currentDate + "maestroLogs.log";
+        String expectedFileName = "logs/maestrologs_" + currentDate + ".log";
         
         if (!expectedFileName.equals(lastFileName)) {
             updateFileName();
